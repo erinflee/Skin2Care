@@ -1,0 +1,32 @@
+# Secrets / API keys — NEVER commit these
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.Python
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# Full raw scrape (204MB, 174k products) — kept locally as an archive,
+# too large for GitHub's 100MB limit. The committed all_products.json is the
+# ~10k subset that matches the prebuilt FAISS index.
+scraped_products/all_products_full.json
