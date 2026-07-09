@@ -57,10 +57,10 @@ def perform_rag(query, embedding_model, api_key, save_path="faiss_index"):
     # context first, then the user's question
     prompt = f"<CONTEXT>\n{context}\n</CONTEXT>\n\nMY QUESTION:\n{query}"
 
-    # send to Groq (llama 3.3 70b) and get a recommendation based on the context
+    # send to Groq (gpt-oss-120b) and get a recommendation based on the context
     client = Groq(api_key=api_key)
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-120b",
         messages=[
             # system prompt tells the llm to only recommend products from the context
             {"role": "system", "content": "You are a skincare expert. Answer clearly using only the context provided. Only recommend products if they are mentioned in the context."},
