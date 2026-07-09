@@ -72,7 +72,7 @@ if query:
         # send to Groq and get a recommendation
         client = Groq(api_key=GROQ_API_KEY)
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-120b",
             messages=[
                 # system prompt keeps the llm grounded to only recommend real products
                 {"role": "system", "content": "You are a skincare expert. Answer clearly using only the context provided. Only recommend products if they are mentioned in the context."},
