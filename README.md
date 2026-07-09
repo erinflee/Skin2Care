@@ -19,7 +19,7 @@ Skin2Care lets users ask natural language questions about skincare and receive p
 1. **Data Collection** — Scraped nearly 10,000 skincare products from Incidecoder using `requests` + BeautifulSoup, capturing product names, brands, ingredients, and descriptions. The scraper paginates the full product listing, is resumable (checkpoints to disk every 100 products), and rate-limits requests to avoid getting blocked.
 2. **Embedding** — Each product is converted into a 768-dimensional vector embedding using `sentence-transformers/all-mpnet-base-v2`
 3. **Vector Search** — Embeddings are indexed with FAISS for fast semantic similarity search
-4. **RAG Pipeline** — User queries retrieve the top 5 most relevant products, which are passed as context to an LLM (Llama 3.3 70B via Groq) to generate a grounded recommendation. A system prompt keeps the model from recommending anything outside the retrieved context.
+4. **RAG Pipeline** — User queries retrieve the top 5 most relevant products, which are passed as context to an LLM (GPT-OSS 120B via Groq) to generate a grounded recommendation. A system prompt keeps the model from recommending anything outside the retrieved context.
 5. **Frontend** — Streamlit app for interactive querying, with the FAISS index cached in memory so the app stays fast between interactions
 
 ## Tech Stack
@@ -27,7 +27,7 @@ Skin2Care lets users ask natural language questions about skincare and receive p
 - **FAISS** — Vector similarity search
 - **Sentence Transformers** — Text embeddings (`all-mpnet-base-v2`)
 - **LangChain** — Embedding, document, and vectorstore components (`langchain-community`, `langchain-core`)
-- **Groq** — LLM inference (Llama 3.3 70B)
+- **Groq** — LLM inference (GPT-OSS 120B)
 - **Streamlit** — Web app frontend
 - **Requests + BeautifulSoup** — Web scraping
 
