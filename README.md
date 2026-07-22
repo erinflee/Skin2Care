@@ -26,7 +26,6 @@ Skin2Care lets users ask natural language questions about skincare and receive p
 
 - **FAISS** — Vector similarity search
 - **Sentence Transformers** — Text embeddings (`all-mpnet-base-v2`)
-- **LangChain** — Embedding, document, and vectorstore components (`langchain-community`, `langchain-core`)
 - **Groq** — LLM inference (GPT-OSS 120B)
 - **Streamlit** — Web app frontend
 - **Requests + BeautifulSoup** — Web scraping
