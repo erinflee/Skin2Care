@@ -4,6 +4,10 @@
 !.env.example
 .streamlit/secrets.toml
 
+# AWS access key downloads from the IAM console (contain the secret access key)
+*_accessKeys.csv
+skin2care-app-reader_accessKeys.csv
+
 # macOS
 .DS_Store
 
@@ -25,6 +29,11 @@ ENV/
 # IDE
 .vscode/
 .idea/
+
+# FAISS index — now stored in S3 and downloaded at runtime (see s3_utils.py),
+# so the binary index files don't belong in Git.
+faiss_index/index.faiss
+faiss_index/index.pkl
 
 # Full raw scrape (204MB, 174k products) — kept locally as an archive,
 # too large for GitHub's 100MB limit. The committed all_products.json is the
