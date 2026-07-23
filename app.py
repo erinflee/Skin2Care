@@ -3,10 +3,14 @@ import streamlit as st # used for deploying onto website
 from langchain_community.embeddings import HuggingFaceEmbeddings  # converts text to vectors
 from langchain_community.vectorstores import FAISS  # loads and searches the saved index
 from groq import Groq  # llm api for generating recommendations
-
+from dotenv import load_dotenv  # loads .env into environment variables
+from s3_utils import ensure_faiss_index  # downloads the FAISS index from S3 at runtime
 
 # path to the saved FAISS index folder
 FAISS_PATH = "faiss_index"
+
+# load environment variables from a local .env file (GROQ_API_KEY, S3_BUCKET, AWS creds)
+load_dotenv()
 
 # get api key from streamlit secrets when deployed
 # st.secrets is used on streamlit cloud
@@ -23,19 +27,22 @@ st.set_page_config(page_title="Skin2Care", page_icon="🧴", layout="centered")
 st.title("🧴 Skin2Care")
 st.caption("Ask me anything about skincare products — I'll recommend based on real ingredient data.")
 
+# stop the app early if the FAISS index hasn't been built yet
+# (skip this check when S3 is configured, since the index gets downloaded at runtime)
+if not os.path.exists(FAISS_PATH) and not os.environ.get("S3_BUCKET"):
+    st.error("FAISS index not found. Run `python ml.py` first to build the index.")
+    st.stop()
+
 # load the embedding model and FAISS index once and cache it
 # @st.cache_resource allows us to only run once and remember it in memory so it does not run for every user interaction
-# loading 11k+ embeddings every query would be too slow
+# loading ~10k embeddings every query would be too slow
 @st.cache_resource
 def load_vectorstore():
+    # download the FAISS index from S3 if it isn't already on local disk (no-op when S3 isn't configured)
+    ensure_faiss_index(FAISS_PATH)
     embed_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
     vectorstore = FAISS.load_local(FAISS_PATH, embed_model, allow_dangerous_deserialization=True)
     return vectorstore
-
-# stop the app early if the FAISS index hasn't been built yet
-if not os.path.exists(FAISS_PATH):
-    st.error("FAISS index not found. Run `python ml.py` first to build the index.")
-    st.stop()
 
 # load the vectorstore into memory
 vectorstore = load_vectorstore()
