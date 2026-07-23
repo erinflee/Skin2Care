@@ -4,6 +4,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings  # converts tex
 from langchain_community.vectorstores import FAISS  # stores and searches vectors
 from langchain_core.documents import Document  # wraps text into a format FAISS understands
 from groq import Groq  # llm api for generating recommendations
+from s3_utils import ensure_faiss_index, upload_faiss_index
 # openrouter and gemini not free...
 
 
