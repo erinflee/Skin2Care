@@ -13,3 +13,21 @@ def product_to_text(product):
     f"{product['product_details']}"
     f"{product['ingredients']}"
   )
+
+
+
+def build(products, save_path):
+  model = SentenceTransformer('all-mpnet-base-v2')
+  text = product_to_text(products)
+  vectors = model.encode(text, normalize_embeddings=True)
+  np_vectors = np.array(vectors).astype('float32')
+
+  dimension = np_vectors.shape[1] # need to know for memory allocation
+  index = faiss.IndexFlatIP(dimension) # hence we tell create index big enough for our data
+
+  index.add(np_vectors)
+  os.makedirs(save_path, exists_ok=True)
+  faiss.write_index(index, os.path.join(save_path, "index.faiss"))
+  with open(os.path.join(save_path, "docs.json"), "w", encoding="utf-8") as file:
+    json.dump(products, file)
+
