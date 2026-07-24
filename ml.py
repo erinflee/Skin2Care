@@ -4,7 +4,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings  # converts tex
 from langchain_community.vectorstores import FAISS  # stores and searches vectors
 from langchain_core.documents import Document  # wraps text into a format FAISS understands
 from groq import Groq  # llm api for generating recommendations
-from s3_utils import ensure_faiss_index, upload_faiss_index
+from s3_utils import ensure_faiss_index, upload_faiss_index, INDEX_FILES
 # openrouter and gemini not free...
 
 
@@ -85,8 +85,12 @@ if __name__ == "__main__":
 
     # build the FAISS index if it doesn't exist yet, otherwise skip
     # skipping saves 30-60 minutes of re-embedding on every run
-    if not os.path.exists(faiss_path):
+
+    ensure_faiss_index(faiss_path)
+
+    if not all(os.path.exists(os.path.join(faiss_path, f)) for f in INDEX_FILES):
         index_to_faiss(json_path, faiss_path)
+        upload_faiss_index(faiss_path)
     else:
         print("FAISS index already exists, skipping.")
 
