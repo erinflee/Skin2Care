@@ -5,6 +5,7 @@ from langchain_community.vectorstores import FAISS  # stores and searches vector
 from langchain_core.documents import Document  # wraps text into a format FAISS understands
 from groq import Groq  # llm api for generating recommendations
 from s3_utils import ensure_faiss_index, upload_faiss_index, INDEX_FILES
+from dotenv import load_dotenv
 # openrouter and gemini not free...
 
 
@@ -73,11 +74,7 @@ def perform_rag(query, embedding_model, api_key, save_path="faiss_index"):
 
 if __name__ == "__main__":
     # load api key from .env file
-    with open(".env") as f:
-        for line in f:
-            key, _, val = line.strip().partition("=")
-            if key:
-                os.environ[key] = val
+    load_dotenv()
 
     api_key = os.environ.get("GROQ_API_KEY")
     json_path = "./scraped_products/all_products.json"
